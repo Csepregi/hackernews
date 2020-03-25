@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import Button from './Button';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { doFetchStories } from '../actions/story';
 
 
-const SearchStories = (props) => {
+const SearchStories = () => {
+
+	const dispatch = useDispatch()
 	const [query, setNewQuery] = useState('')
 
 
 	const onSubmit = (event) => {
 		if (query) {
-			props.onFetchStories(query)
+			dispatch(doFetchStories(query))
 			setNewQuery('');
 		}
 		event.preventDefault();
@@ -20,7 +22,6 @@ const SearchStories = (props) => {
 		const { value } = event.target;
 		setNewQuery(value);
 	}
-
 
 	return (
 		<form onSubmit={onSubmit}>
@@ -37,10 +38,4 @@ const SearchStories = (props) => {
 }
 
 
-const mapDispatchToProps = (dispatch) => ({
-	onFetchStories: query => dispatch(doFetchStories(query)),
-});
-export default connect(
-	null,
-	mapDispatchToProps
-)(SearchStories);
+export default SearchStories;

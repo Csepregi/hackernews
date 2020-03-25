@@ -1,8 +1,7 @@
 import React from 'react';
 import './Stories.css';
-import { connect } from 'react-redux';
 import { getReadableStories, getFetchError } from '../selectors/story';
-
+import { useSelector } from 'react-redux'
 import Story from './Story';
 
 const COLUMNS = {
@@ -27,18 +26,23 @@ const COLUMNS = {
 	},
 };
 
-const Stories = ({ stories, error }) =>
-	<div className="stories">
-		<StoriesHeader columns={COLUMNS} />
-		{error && <p className="error">Something went wrong ...</p>}
-		{(stories || []).map(story =>
-			<Story
-				key={story.objectID}
-				story={story}
-				columns={COLUMNS}
-			/>
-		)}
-	</div>
+const Stories = () => {
+	const stories = useSelector(getReadableStories)
+	const error = useSelector(getFetchError)
+	return (
+		<div className="stories">
+			<StoriesHeader columns={COLUMNS} />
+			{error && <p className="error">Something went wrong ...</p>}
+			{(stories || []).map(story =>
+				<Story
+					key={story.objectID}
+					story={story}
+					columns={COLUMNS}
+				/>
+			)}
+		</div>
+	)
+}
 
 const StoriesHeader = ({ columns }) =>
 	<div className="stories-header">
@@ -52,12 +56,5 @@ const StoriesHeader = ({ columns }) =>
 		)}
 	</div>
 
-const mapStateToProps = state => ({
-	stories: getReadableStories(state),
-	error: getFetchError(state),
-});
 
-export default connect(
-	mapStateToProps
-)(Stories);
-
+export default Stories

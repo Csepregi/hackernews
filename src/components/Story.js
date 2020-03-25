@@ -1,11 +1,11 @@
 import React from 'react';
 import { ButtonInline } from './Button';
 import './Story.css';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { doArchiveStory } from '../actions/archive';
 
-const Story = ({ story, columns, onArchive }) => {
-
+const Story = ({ story, columns }) => {
+	const dispatch = useDispatch()
 	const {
 		title,
 		url,
@@ -30,7 +30,7 @@ const Story = ({ story, columns, onArchive }) => {
 				{points}
 			</span>
 			<span style={{ width: columns.archive.width }}>
-				<ButtonInline onClick={() => onArchive(objectID)}>
+				<ButtonInline onClick={() => dispatch(doArchiveStory(objectID))}>
 					Archive
         </ButtonInline>
 			</span>
@@ -38,10 +38,5 @@ const Story = ({ story, columns, onArchive }) => {
 	);
 }
 
-const mapDispatchToProps = dispatch => ({
-	onArchive: id => dispatch(doArchiveStory(id)),
-});
-export default connect(
-	null,
-	mapDispatchToProps
-)(Story);
+
+export default Story
