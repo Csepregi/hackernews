@@ -1,49 +1,41 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import Button from './Button';
 import { connect } from 'react-redux';
 import { doFetchStories } from '../actions/story';
 
-class SearchStories extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			query: '',
-		};
 
-		this.onChange = this.onChange.bind(this);
-		this.onSubmit = this.onSubmit.bind(this);
-	}
+const SearchStories = (props) => {
+	const [query, setNewQuery] = useState('')
 
-	onSubmit(event) {
-		const { query } = this.state;
+
+	const onSubmit = (event) => {
 		if (query) {
-			this.props.onFetchStories(query)
-			this.setState({ query: '' });
+			props.onFetchStories(query)
+			setNewQuery('');
 		}
 		event.preventDefault();
 	}
 
-	onChange(event) {
+	const onChange = (event) => {
 		const { value } = event.target;
-		this.setState({ query: value });
+		setNewQuery(value);
 	}
 
 
-	render() {
-		return (
-			<form onSubmit={this.onSubmit}>
-				<input
-					type="text"
-					value={this.state.query}
-					onChange={this.onChange}
-				/>
-				<Button type="submit">
-					Search
+	return (
+		<form onSubmit={onSubmit}>
+			<input
+				type="text"
+				value={query}
+				onChange={onChange}
+			/>
+			<Button type="submit">
+				Search
         </Button>
-			</form>
-		);
-	}
+		</form>
+	);
 }
+
 
 const mapDispatchToProps = (dispatch) => ({
 	onFetchStories: query => dispatch(doFetchStories(query)),
